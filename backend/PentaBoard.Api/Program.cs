@@ -1,64 +1,109 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using DotNetEnv;
-using PentaBoard.Api.Infrastructure;                     // AppDbContext
-using PentaBoard.Api.Features.Authentication.Common;     // AddJwtAuth extension
-using MediatR;
-using PentaBoard.Api.Features.Authentication.LoginUser; 
-// .env dosyasını yükle (.env -> Environment Variables)
+using PentaBoard.Api.Infrastructure;                         // AppDbContext
+using PentaBoard.Api.Features.Authentication.Common;         // AddJwtAuth()
+using PentaBoard.Api.Features.Authentication.LoginUser;      // MediatR assembly
+using PentaBoard.Api.Infrastructure.Email;                   // IEmailSender, SmtpOptions
+using PentaBoard.Api.Infrastructure.Security;                // IPasswordHasher
+
+// 1) .env -> Environment Variables
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
-// Ortam değişkenlerini konfige ekle
+
+// 2) appsettings + Environment Variables
 builder.Configuration.AddEnvironmentVariables();
 
-// Services
+// 3) Services
 builder.Services.AddControllers();
+
+// Swagger + Bearer
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "PentaBoard API", Version = "v1" });
+    var scheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Bearer {token}"
+    };
+    c.AddSecurityDefinition("Bearer", scheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement { [scheme] = new List<string>() });
+});
 
-builder.Services.AddDbContext<AppDbContext>(o =>
-    o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// SMTP (Smtp__* env/appsettings)
+builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
+builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
 
-// CORS: frontend originlerini izinli yap
+// Password Hasher
+builder.Services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
+
+// DbContext
+var connStr =
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? builder.Configuration["ConnectionStrings:DefaultConnection"]
+    ?? builder.Configuration["ConnectionStrings__DefaultConnection"]
+    ?? builder.Configuration["DefaultConnection"];
+
+if (string.IsNullOrWhiteSpace(connStr))
+    throw new InvalidOperationException("Connection string 'DefaultConnection' bulunamadı.");
+
+builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(connStr));
+
+// HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+
+// CORS (yalnızca frontend origin’lerini ekle)
 const string CorsPolicy = "frontend";
+var configuredOrigins = (builder.Configuration["Cors:Origins"] ?? "")
+    .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+var defaultOrigins = new[] { "http://localhost:3000", "http://localhost:5173" };
+var allowedOrigins = configuredOrigins.Length > 0 ? configuredOrigins : defaultOrigins;
+
 builder.Services.AddCors(opt =>
 {
-    opt.AddPolicy(CorsPolicy, p =>
-        p.WithOrigins(
-            "http://localhost:3000", // CRA
-            "http://localhost:5173"  // Vite
-        )
+    opt.AddPolicy(CorsPolicy, p => p
+        .WithOrigins(allowedOrigins)
         .AllowAnyHeader()
-        .AllowAnyMethod()
-        // .AllowCredentials() // cookie tabanlı auth kullanırsan aç
-    );
+        .AllowAnyMethod());
 });
-// ✅ MediatR: handler’ları kaydet
+
+// MediatR
 builder.Services.AddMediatR(cfg =>
 {
-    // Proje tek assembly olduğu için handler'ın bulunduğu assembly'den tara
     cfg.RegisterServicesFromAssemblyContaining<LoginUserHandler>();
 });
-// JWT kurulumunu feature içindeki extension yapıyor
+
+// JWT
 builder.Services.AddJwtAuth(builder.Configuration);
 
+// Admin policy (rol isimlerindeki küçük/büyük farkını tolere et)
+builder.Services.AddAuthorization(o =>
+{
+    o.AddPolicy("AdminOnly", p => p.RequireRole("Admin", "System Admin", "admin"));
+});
+
+// 4) Pipeline
 var app = builder.Build();
 
-// Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Dev'de HTTP kullanıyorsun; https'e zorlamayı prod'a bırak
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
 
-app.UseCors(CorsPolicy);     // ⬅️ CORS'u auth/route'lardan ÖNCE koy
-app.UseAuthentication();     // JWT middleware
+app.UseCors(CorsPolicy);
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

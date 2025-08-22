@@ -21,12 +21,22 @@ public class LoginUserHandler : IRequestHandler<LoginUserCommand, string>
 
     public async Task<string> Handle(LoginUserCommand request, CancellationToken ct)
     {
-        var email = request.Email.Trim();
+        // 🔧 ÖNEMLİ: normalize et
+        var email = request.Email.Trim().ToLowerInvariant();
+
         var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email, ct);
         if (user is null)
             throw new UnauthorizedAccessException("Invalid credentials");
 
         var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+
+        // İsteğe bağlı: SuccessRehashNeeded gelirse hash'i yenile
+        if (result == PasswordVerificationResult.SuccessRehashNeeded)
+        {
+            user.PasswordHash = _hasher.HashPassword(user, request.Password);
+            await _db.SaveChangesAsync(ct);
+        }
+
         if (result == PasswordVerificationResult.Failed)
             throw new UnauthorizedAccessException("Invalid credentials");
 

@@ -168,3 +168,8 @@ C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\n
 C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\net9.0\MediatR.Contracts.dll
 C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\net9.0\Sprache.dll
+C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\obj\Debug\net9.0\PentaBoard.Api.sourcelink.json
+C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\net9.0\BCrypt.Net-Next.dll
+C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
+C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\net9.0\MailKit.dll
+C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\net9.0\MimeKit.dll
