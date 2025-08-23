@@ -1,0 +1,121 @@
+/* ==== Kök ==== */
+html, body, #root { height: 100%; }
+body { 
+  margin: 0; 
+  overflow: hidden; 
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; 
+}
+
+/* ==== Layout ==== */
+.login-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;   /* 🔹 %50 – %50 */
+  height: 100vh;                   /* tam ekran */
+  background: #0f172a;
+  color: #111827;
+}
+
+/* ==== Sol: Form Bölümü ==== */
+.login-form-section {
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  overflow: hidden;               
+  border-right: 1px solid #0b1224; /* 🔹 Ortadan çizgi */
+}
+
+.login-form-container { width: 360px; }
+
+.logo-container { display: flex; justify-content: center; margin-bottom: 16px; }
+.logo {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: #2563eb;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-icon { width: 24px; height: 24px; color: #fff; }
+
+.login-header { text-align: center; margin-bottom: 16px; }
+.login-title { font-size: 28px; font-weight: 700; color: #111827; margin: 0; }
+.login-subtitle { color: #6b7280; margin-top: 6px; }
+
+.google-login-btn {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+  height: 44px; cursor: pointer;
+}
+.google-login-btn:hover { background: #f9fafb; }
+.google-icon { width: 20px; height: 20px; }
+.google-login-text { color: #111827; font-weight: 600; }
+
+.divider { display: flex; align-items: center; gap: 10px; margin: 18px 0; }
+.divider-line { height: 1px; background: #e5e7eb; flex: 1; }
+.divider-text { color: #6b7280; font-size: 12px; }
+
+.form-container { display: grid; gap: 14px; }
+
+.form-group { display: grid; gap: 6px; }
+.form-label { color: #374151; font-weight: 600; font-size: 14px; }
+.form-input {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #d1d5db; border-radius: 10px;
+  padding: 0 12px; outline: none;
+}
+.form-input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+
+.password-container { position: relative; }
+.password-input { padding-right: 44px; }
+.password-toggle {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  border: none; background: none; cursor: pointer;
+  padding: 6px; border-radius: 8px; color: #6b7280;
+}
+.password-toggle:hover { background: #f3f4f6; }
+.password-toggle-icon { width: 20px; height: 20px; }
+
+.form-options {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 8px;
+}
+.remember-me { display: inline-flex; align-items: center; gap: 8px; color: #374151; }
+.remember-checkbox { width: 16px; height: 16px; }
+.forgot-password {
+  background: none; border: none; color: #2563eb; cursor: pointer; font-weight: 600;
+}
+
+.login-btn {
+  width: 100%; height: 44px; border: none; border-radius: 10px;
+  background: #2563eb; color: #fff; font-weight: 700; cursor: pointer; margin-top: 6px;
+}
+.login-btn:hover { background: #1d4ed8; }
+
+.login-footer { margin-top: 16px; text-align: center; color: #6b7280; font-size: 12px; }
+
+/* ==== Sağ: Görsel Alan ==== */
+.dashboard-section {
+  position: relative;
+  overflow: hidden;             /* taşma engelle */
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-art {
+  position: absolute;
+  inset: 0;                     
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;     /* 🔹 resim TAM sığsın, kırpılmasın */
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 980px){
+  body { overflow: auto; }      
+  .login-container { grid-template-columns: 1fr; height: auto; }
+  .dashboard-section { display: none; }
+}

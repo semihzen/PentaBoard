@@ -1,0 +1,189 @@
+/* ===== UsersPage.css ===== */
+
+/* Wrapper */
+.users-wrap {
+  display: grid;
+  gap: 14px;
+}
+
+/* Header */
+.users-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.users-title h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.users-title .muted {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Tools (search, role select, refresh) */
+.users-tools {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.users-search {
+  position: relative;
+}
+
+.users-search .search-ic {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  width: 16px;
+  height: 16px;
+}
+
+.users-search input {
+  height: 36px;
+  min-width: 260px;
+  padding: 0 12px 0 32px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.users-select {
+  height: 36px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0 10px;
+  background: #fff;
+}
+
+/* Buttons / banners */
+.btn.ghost {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.btn.ghost:hover {
+  background: #f8fafc;
+}
+
+.banner.error {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fee2e2;
+}
+
+/* Table */
+.table {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.t-head,
+.t-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1.8fr 0.8fr;
+  align-items: center;
+}
+
+.t-head {
+  background: #f9fafb;
+  color: #374151;
+  font-weight: 700;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.t-head > div,
+.t-row .cell {
+  padding: 12px 16px;
+}
+
+.t-row {
+  border-top: 1px solid #f3f4f6;
+}
+
+.t-row:hover {
+  background: #fafafa;
+}
+
+.t-loading,
+.t-empty {
+  padding: 18px;
+  text-align: center;
+  color: #6b7280;
+}
+
+/* Cells */
+.cell.name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #e6f0ff;
+  color: #1d4ed8;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.strong {
+  font-weight: 700;
+}
+
+.small {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.role-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eefbf3;
+  color: #0f7a43;
+  border: 1px solid #d6f2e2;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .users-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .users-tools {
+    flex-wrap: wrap;
+  }
+  .users-search input {
+    min-width: 200px;
+    width: 100%;
+  }
+  .t-head,
+  .t-row {
+    grid-template-columns: 1.2fr 1.6fr 0.9fr;
+  }
+}

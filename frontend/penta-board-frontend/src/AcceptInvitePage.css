@@ -1,0 +1,171 @@
+/* ===========================
+   AcceptInvitePage.css
+   Kurumsal, temiz, odaklı form görünümü
+   =========================== */
+
+:root {
+  --bg: #f7f8fa;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e6e8f0;
+  --primary: #2563eb;
+  --primary-600: #1e4ed8;
+  --primary-700: #1d4ed8;
+  --ring: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  --shadow: 0 10px 30px rgba(2, 8, 23, 0.06);
+  --danger: #dc2626;
+  --success: #16a34a;
+}
+
+/* Arka plan ve tipografi */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+/* İsteğe bağlı: dış sarmalayıcı kullanırsan
+   <div className="invite-wrap"><div className="invite-card">... */
+.invite-wrap {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+}
+.invite-card {
+  width: 100%;
+  max-width: 560px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 28px 28px 24px;
+  animation: fadeInUp .24s ease-out both;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Başlık ve alt başlık */
+h2 {
+  margin: 0 0 6px 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+.invite-sub {
+  color: var(--muted);
+  font-size: 14px;
+}
+.invite-sub b {
+  color: var(--text);
+}
+
+/* Form yerleşimi */
+form {
+  margin-top: 12px;
+}
+.form-grid {
+  display: grid;
+  gap: 14px;
+}
+.form-row {
+  display: grid;
+  gap: 6px;
+}
+label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Girdi elemanları (componentte zaten className="input") */
+.input {
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fbfbfd;
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.input::placeholder { color: #9aa3b2; }
+.input:hover { background: #fafafe; }
+.input:focus {
+  border-color: var(--primary);
+  box-shadow: var(--ring);
+  background: #fff;
+}
+
+/* Hata/başarı banner'ları (istersen inline yerine bu sınıfları kullan) */
+.banner {
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+.banner.error {
+  border-color: #fecaca;
+  background: #fee2e2;
+  color: #991b1b;
+}
+.banner.success {
+  border-color: #bbf7d0;
+  background: #dcfce7;
+  color: #166534;
+}
+.banner.info {
+  border-color: #bfdbfe;
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+/* Buton (componentte className="btn") */
+.btn {
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: .2px;
+  cursor: pointer;
+  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease, background .15s ease;
+  margin-top: 4px;
+}
+.btn:hover { filter: brightness(1.03); }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { box-shadow: var(--ring); }
+.btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  filter: grayscale(.1);
+}
+
+/* Küçük rozet örneği (rol göstermek için kullanmak istersen) */
+.role-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #d1fae5;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Daha dar ekranlar */
+@media (max-width: 640px) {
+  .invite-card { padding: 22px 18px; border-radius: 14px; }
+  h2 { font-size: 24px; }
+}

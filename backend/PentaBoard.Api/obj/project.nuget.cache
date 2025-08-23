@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "nr0swAtJbLQ=",
+  "dgSpecHash": "XvlXO8CdVQw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Semih Zenginoğlu\\Desktop\\PentaBoard\\backend\\PentaBoard.Api\\PentaBoard.Api.csproj",
+  "projectFilePath": "C:\\Users\\Semih Zenginoğlu\\Desktop\\PentaBoard\\backend\\Pentaboard.api\\PentaBoard.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Semih Zenginoğlu\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Semih Zenginoğlu\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
