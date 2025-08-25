@@ -8,8 +8,10 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+    // DbSets
     public DbSet<User> Users => Set<User>();
     public DbSet<UserInvite> UserInvites => Set<UserInvite>();
+    public DbSet<Project> Projects => Set<Project>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -76,5 +78,30 @@ public class AppDbContext : DbContext
             e.Property(x => x.AcceptedAt)
              .HasColumnType("datetime2");
         });
+
+      modelBuilder.Entity<Project>(e =>
+{
+    e.ToTable("Projects");
+
+    e.HasKey(x => x.Id);
+    e.HasIndex(x => x.Key).IsUnique();
+
+    e.Property(x => x.Name).HasMaxLength(200).IsRequired();
+    e.Property(x => x.Key).HasMaxLength(100).IsRequired();
+    e.Property(x => x.Description).HasMaxLength(1000);
+    e.Property(x => x.Color).HasMaxLength(50).IsRequired();
+    e.Property(x => x.CreatedAt).HasColumnType("datetime2");
+
+    // Relations
+    e.HasOne(x => x.ProjectAdmin)
+        .WithMany()
+        .HasForeignKey(x => x.ProjectAdminId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+    e.HasOne(x => x.CreatedBy)
+        .WithMany()
+        .HasForeignKey(x => x.CreatedById)
+        .OnDelete(DeleteBehavior.Restrict);
+});
     }
 }

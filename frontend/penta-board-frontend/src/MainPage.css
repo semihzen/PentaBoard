@@ -35,7 +35,7 @@ html,body,#root{height:100%}
   background:#fde68a;color:#92400e;
 }
 
-/* ===== Sidebar (Sade liste) ===== */
+/* ===== Sidebar ===== */
 .sidebar{
   width:240px;background:var(--panel);border-right:1px solid var(--line);padding:12px 8px;
 }
@@ -51,7 +51,7 @@ html,body,#root{height:100%}
 .link-btn{background:none;border:none;color:var(--primary);cursor:pointer;font-size:13px;text-align:left;}
 .link-btn:hover{text-decoration:underline;}
 
-/* Eski “kart” kullanıcı bloğunu tamamen kapatıyoruz */
+/* eski user kart blokları kapalı */
 .user-block,.user-card,.user-photo,.user-meta,.user-handle,.user-muted,.user-badge{display:none !important;}
 
 /* ===== Body ===== */
@@ -72,31 +72,67 @@ html,body,#root{height:100%}
 .tab{padding:8px 12px;background:none;border:none;cursor:pointer;color:#6b7280;font-weight:600;border-radius:10px 10px 0 0;}
 .tab.active{background:#fff;border:1px solid #e5e7eb;border-bottom-color:#fff;color:var(--primary);}
 
-/* ===== Filter ===== */
-.filter{text-align:right;margin:10px 0 18px;}
-.filter button{
-  display:inline-flex;align-items:center;gap:6px;border:1px solid #d1d5db;padding:6px 10px;border-radius:10px;background:#fff;cursor:pointer;color:#374151;
+/* ===== Projects ===== */
+.projects-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:14px;
 }
 
-/* ===== Projects ===== */
-.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+/* kart ortalı + avatar merkezde */
 .project-card{
-  background:#fff;border:1px solid #eef0f3;border-radius:14px;padding:16px;position:relative;cursor:pointer;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:160px;
+  background:#fff;
+  border:1px solid #eef0f3;
+  border-radius:14px;
+  padding:16px;
+  cursor:pointer;
   transition:transform .12s ease, box-shadow .12s ease;
+  text-align:center;
 }
 .project-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06);}
-.project-icon{
-  width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;
-  color:#fff;font-weight:800;font-size:18px;margin-bottom:8px;
+
+.more-btn{
+  position:absolute;top:8px;right:8px;
+  background:none;border:none;cursor:pointer;color:#9ca3af;
 }
-.project-icon.teal{background:teal;} .project-icon.blue{background:#2563eb;}
-.project-icon.purple{background:purple;} .project-icon.orange{background:orange;}
-.more-btn{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;color:#9ca3af;}
 .more-btn:hover{color:#374151;}
+
+/* avatar (E) tam ortada */
+.project-avatar{
+  width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:18px;color:#fff;
+}
+
+/* renkler */
+.project-avatar.teal { background-color: #14b8a6; }
+.project-avatar.blue { background-color: #2563eb; }
+.project-avatar.amber { background-color: #f59e0b; }
+.project-avatar.rose { background-color: #e11d48; }
+.project-avatar.violet { background-color: #7c3aed; }
+.project-avatar.slate { background-color: #475569; }
+
+.project-name{
+  font-size:15px;font-weight:700;color:#0f172a;line-height:1.2;
+}
+
+/* (eski .project-icon stili artık kullanılmıyor ama kalsın istersen)
+.project-icon{display:none;}
+*/
 
 /* ===== Empty State ===== */
 .empty-state{text-align:center;padding:40px;color:#6b7280;}
-.empty-icon{width:64px;height:64px;margin:0 auto 16px;background:#f3f4f6;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.empty-icon{
+  width:64px;height:64px;margin:0 auto 16px;background:#f3f4f6;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
 
 /* ===== Footer ===== */
 .footer{
@@ -114,4 +150,31 @@ html,body,#root{height:100%}
   .sidebar{display:none;}
   .search-box{display:none;}
   .body{padding:16px;}
+}
+/* --- Card actions menu --- */
+.menu-wrap { position: absolute; top: 8px; right: 8px; }
+.card-menu{
+  position:absolute; top:36px; right:0;
+  min-width: 180px; background:#fff; border:1px solid #e5e7eb; border-radius:10px;
+  box-shadow:0 12px 30px rgba(0,0,0,.10); padding:6px; z-index:5;
+}
+.menu-item{
+  width:100%; text-align:left; background:none; border:0; border-radius:8px;
+  padding:8px 10px; font-size:14px; cursor:pointer; color:#111827;
+}
+.menu-item:hover{ background:#f3f4f6; }
+.menu-item.danger{ color:#b91c1c; }
+.menu-item.danger:hover{ background:#fee2e2; }
+.menu-item.disabled{ color:#9ca3af; cursor:not-allowed; }
+
+.title.linklike {
+  text-decoration: none;   /* alt çizgi yok */
+  color: inherit;          /* eski renk gibi */
+  font-weight: 600;        /* mevcut başlık kalınlığı */
+  cursor: pointer;
+}
+.title.linklike:hover,
+.title.linklike:focus,
+.title.linklike:active {
+  text-decoration: none;   /* hover/focus/active durumlarında da çizgi olmasın */
 }

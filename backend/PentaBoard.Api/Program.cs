@@ -6,7 +6,10 @@ using PentaBoard.Api.Features.Authentication.Common;         // AddJwtAuth()
 using PentaBoard.Api.Features.Authentication.LoginUser;      // MediatR assembly
 using PentaBoard.Api.Infrastructure.Email;                   // IEmailSender, SmtpOptions
 using PentaBoard.Api.Infrastructure.Security;                // IPasswordHasher
-
+using PentaBoard.Api.Features.Projects;
+using PentaBoard.Api.Features.Projects.GetProjects;
+using PentaBoard.Api.Features.Projects.CreateProject;
+using PentaBoard.Api.Features.Projects.DeleteProject;
 // 1) .env -> Environment Variables
 Env.Load();
 
@@ -105,7 +108,8 @@ if (!app.Environment.IsDevelopment())
 app.UseCors(CorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapCreateProjectEndpoint();
+app.MapGetProjectsEndpoint();
 app.MapControllers();
-
+app.MapDeleteProjectEndpoint();
 app.Run();

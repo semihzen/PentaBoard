@@ -84,7 +84,6 @@ export default function InviteUserModal({ open, onClose, onInvited }) {
               <Shield size={16} />
               <select value={role} onChange={(e) => setRole(e.target.value)}>
                 <option>User</option>
-                <option>Admin</option>
                 <option>System Admin</option>
               </select>
             </div>

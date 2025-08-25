@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PentaBoard.Api.Infrastructure;
 
@@ -11,9 +12,11 @@ using PentaBoard.Api.Infrastructure;
 namespace PentaBoard.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250825113240_CreateProjectsTable")]
+    partial class CreateProjectsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,9 +77,6 @@ namespace PentaBoard.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedById")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -94,8 +94,10 @@ namespace PentaBoard.Api.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<Guid>("ProjectAdminId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("OwnerHandle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
@@ -105,12 +107,8 @@ namespace PentaBoard.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("Key")
                         .IsUnique();
-
-                    b.HasIndex("ProjectAdminId");
 
                     b.ToTable("Projects", (string)null);
                 });
@@ -163,25 +161,6 @@ namespace PentaBoard.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("UserInvites", (string)null);
-                });
-
-            modelBuilder.Entity("PentaBoard.Api.Domain.Project", b =>
-                {
-                    b.HasOne("PentaBoard.Api.Domain.Entities.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PentaBoard.Api.Domain.Entities.User", "ProjectAdmin")
-                        .WithMany()
-                        .HasForeignKey("ProjectAdminId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ProjectAdmin");
                 });
 #pragma warning restore 612, 618
         }

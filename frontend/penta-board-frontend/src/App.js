@@ -1,15 +1,16 @@
+// src/App.js
 import { Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
 import MainPage from './MainPage';
 import Login from './Login';
 import NotFound from './NotFound';
 import { getToken, API_BASE } from './utils/auth';
 import { useEffect } from 'react';
-import AcceptInvitePage from "./AcceptInvitePage"; 
+import AcceptInvitePage from './AcceptInvitePage';
 
 // Korumalı route
 function RequireAuth({ children }) {
   const token = getToken();
-  if (!token) return <NotFound />;
+  if (!token) return <NotFound />; // token yoksa 404 gösteriyorsun; istersen PentaLogin'e yönlendirebilirim
   return children;
 }
 
@@ -40,7 +41,7 @@ function RedirectToUser() {
   return null;
 }
 
-// slug ile (ör. /PentaBoard/admin veya /PentaBoard/admin/users)
+// slug ile (ör. /PentaBoard/admin, /PentaBoard/admin/users, /projects/...)
 function MainPageWithSlug() {
   const { slug } = useParams();
   return (
@@ -63,7 +64,11 @@ export default function App() {
       <Route path="/PentaBoard/:slug" element={<MainPageWithSlug />} />
       <Route path="/PentaBoard/:slug/users" element={<MainPageWithSlug />} />
 
-      {/* Login her zaman açık */}
+      {/* 🔹 Proje rotaları — sadece body değişecek ekranlar */}
+      <Route path="/PentaBoard/:slug/projects/:projectKey" element={<MainPageWithSlug />} />
+      <Route path="/PentaBoard/:slug/projects/:projectKey/:sub" element={<MainPageWithSlug />} />
+
+      {/* Login / Davet */}
       <Route path="/PentaLogin" element={<Login />} />
       <Route path="/accept-invite" element={<AcceptInvitePage />} />
 
