@@ -1,0 +1,306 @@
+/* Layout */
+.pb-summary-wrap {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+}
+
+@media (max-width: 1100px) {
+  .pb-summary-wrap { grid-template-columns: 1fr; }
+}
+
+/* Cards */
+.pb-card {
+  background: #fff;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.03);
+}
+
+.pb-h2 { font-size: 22px; margin: 0 0 10px; font-weight: 700; }
+.pb-h3 { font-size: 18px; margin: 0 0 12px; font-weight: 700; }
+.pb-paragraph { color: #4b5563; line-height: 1.5; margin: 0 0 14px; }
+
+/* About card: 2 kolon (sol: içerik, sağ: illüstrasyon) */
+.pb-about {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 240px; /* sağ kolon illüstrasyon */
+  align-items: start;
+  gap: 8px;
+  min-height: 160px;
+}
+
+@media (max-width: 900px) {
+  .pb-about {
+    grid-template-columns: 1fr;
+    min-height: 140px;
+  }
+}
+
+/* Başlık satırı: Solda H2, sağda buton */
+.pb-card-head {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+/* İÇERİK artık SOL kolonda */
+.pb-about__text {
+  grid-column: 1;      /* ← eskiden 2 idi */
+  min-width: 0;
+}
+
+/* İllüstrasyon SAĞ kolonda */
+.pb-about__illu {
+  position: relative;
+  grid-column: 2;      /* ← eskiden 1 idi */
+  height: 120px;
+}
+
+@media (max-width: 900px) {
+  .pb-about__text,
+  .pb-about__illu { grid-column: 1; }
+}
+
+
+.pb-figure {
+  position: absolute; bottom: 12px; right: 56px;
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, #1f7aff, #7ea6ff);
+  border-radius: 8px;
+  transform: rotate(-8deg);
+  opacity: .85;
+}
+
+.pb-cloud { position: absolute; bottom: 0; background: #eef2ff; border-radius: 999px; }
+.pb-cloud-1 { width: 140px; height: 26px; left: 20px; }
+.pb-cloud-2 { width: 90px; height: 20px; right: 16px; bottom: 12px; }
+
+/* Buttons */
+.pb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #111827;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.pb-btn:hover { background: #f3f4f6; }
+.pb-btn-ghost { background: #f9fafb; }
+.pb-btn-plus { font-weight: 700; font-size: 16px; }
+
+.pb-btn-primary {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+.pb-btn-primary:hover {
+  background: #1e40af;
+  border-color: #1e40af;
+}
+
+/* Meta & tags (desc altı) */
+.pb-meta {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  align-items: center;
+}
+.pb-meta-item { color: #374151; font-size: 13px; }
+.pb-meta-item span { color: #6b7280; margin-right: 6px; }
+
+.pb-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.pb-tag {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+/* Right column cards */
+.pb-col-right .pb-card + .pb-card { margin-top: 16px; }
+.pb-side-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; margin-bottom: 10px;
+}
+.pb-select {
+  border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 10px;
+  background: #fff; font-size: 14px;
+}
+
+.pb-side-stats { display: grid; gap: 12px; }
+.pb-side-value { font-weight: 800; font-size: 22px; }
+.pb-side-sub { color: #6b7280; font-size: 12px; }
+
+/* Members (right) */
+.pb-member { display: flex; align-items: center; gap: 10px; }
+.pb-member + .pb-member { margin-top: 10px; }
+.pb-member-circle {
+  width: 28px; height: 28px; border-radius: 999px;
+  background: #fde68a; color: #92400e;
+  display: grid; place-items: center; font-weight: 700;
+}
+.pb-member-name { font-size: 14px; }
+
+/* Columns container */
+.pb-col-left { min-width: 0; }
+.pb-col-right { min-width: 0; }
+/* Members list rows */
+.pb-members-list { display: grid; gap: 10px; }
+
+.pb-member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pb-member-sub { color: #6b7280; font-size: 12px; }
+
+.pb-chip {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eef2ff;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+}
+
+.pb-chip.light { background: #f5f5f5; }
+
+.pb-member-circle.owner {
+  background: #d1fae5; /* green-100 */
+  color: #065f46;      /* green-800 */
+}
+
+/* small / danger buttons */
+.pb-btn.sm { padding: 6px 10px; font-size: 13px; }
+.pb-btn.danger { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+.pb-btn.danger:hover { background: #fecaca; }
+
+.pb-muted { color: #6b7280; }
+/* Members list layout */
+.pb-members-list { display: grid; gap: 10px; }
+.pb-member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid #f3f4f6;
+}
+.pb-member-row:first-child { border-top: 0; padding-top: 0; }
+
+.pb-member-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  color: #6b7280; /* gray-500 */
+  font-size: 12px;
+  margin-top: 2px;
+}
+.pb-member-email { opacity: .95; }
+
+.pb-chip {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #eef2ff; /* indigo-50 */
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+.pb-chip.light {
+  background: #f9fafb;
+  color: #374151;
+}
+
+.pb-member-circle.owner {
+  background: #dbeafe;  /* blue-100 */
+  color: #1e40af;       /* blue-800 */
+}
+
+/* tiny danger button on the right */
+.pb-btn.sm { padding: 6px 10px; font-size: 13px; }
+.pb-btn.danger {
+  background: #fee2e2;   /* red-100 */
+  color: #991b1b;        /* red-800 */
+  border-color: #fecaca; /* red-200 */
+}
+.pb-btn.danger:hover { background: #fecaca; }
+.pb-muted { color: #6b7280; }
+/* GENİŞ members kartı (sol kolon) */
+.pb-members-wide { padding-top: 16px; }
+
+/* Kart taşmasın, içerik kaydırılsın */
+.pb-members-scroll {
+  max-height: 360px;          /* ihtiyaca göre ayarlayabilirsin */
+  overflow: auto;
+  padding-right: 4px;         /* scrollbar için biraz iç boşluk */
+}
+
+/* Members list layout */
+.pb-members-list { display: grid; gap: 12px; }
+.pb-member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid #f3f4f6;
+}
+.pb-member-row:first-child { border-top: 0; padding-top: 0; }
+
+.pb-member { display: flex; align-items: center; gap: 10px; }
+
+/* Ad Soyad üstte belirgin */
+.pb-member-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Email altta küçük ve gri */
+.pb-member-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  color: #6b7280;             /* gray-500 */
+  font-size: 12px;
+  margin-top: 2px;
+}
+.pb-member-email { opacity: .95; }
+
+.pb-member-circle {
+  width: 28px; height: 28px; border-radius: 999px;
+  background: #fde68a; color: #92400e;
+  display: grid; place-items: center; font-weight: 700;
+}
+.pb-member-circle.owner { background: #dbeafe; color: #1e40af; }
+
+.pb-chip {
+  margin-left: 8px; padding: 2px 8px; border-radius: 999px;
+  font-size: 11px; font-weight: 600; background: #eef2ff; color: #374151;
+  border: 1px solid #e5e7eb;
+}
+.pb-chip.light { background: #f9fafb; color: #374151; }
+
+.pb-btn.sm { padding: 6px 10px; font-size: 13px; }
+.pb-btn.danger { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+.pb-btn.danger:hover { background: #fecaca; }
+.pb-muted { color: #6b7280; }
+

@@ -256,7 +256,7 @@ export default function NewProjectPopUp({ open, onClose, onCreated }) {
           </label>
 
           <label className="np-field">
-            <span>Description (optional)</span>
+            <span>Description </span>
             <textarea
               rows={3}
               placeholder="What is this project about?"

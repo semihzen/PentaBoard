@@ -13,6 +13,9 @@ public class AppDbContext : DbContext
     public DbSet<UserInvite> UserInvites => Set<UserInvite>();
     public DbSet<Project> Projects => Set<Project>();
 
+    // ✅ Yeni: ProjectMembers
+    public DbSet<ProjectMember> ProjectMembers => Set<ProjectMember>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -79,29 +82,62 @@ public class AppDbContext : DbContext
              .HasColumnType("datetime2");
         });
 
-      modelBuilder.Entity<Project>(e =>
-{
-    e.ToTable("Projects");
+        // --- Project ---
+        modelBuilder.Entity<Project>(e =>
+        {
+            e.ToTable("Projects");
 
-    e.HasKey(x => x.Id);
-    e.HasIndex(x => x.Key).IsUnique();
+            e.HasKey(x => x.Id);
+            e.HasIndex(x => x.Key).IsUnique();
 
-    e.Property(x => x.Name).HasMaxLength(200).IsRequired();
-    e.Property(x => x.Key).HasMaxLength(100).IsRequired();
-    e.Property(x => x.Description).HasMaxLength(1000);
-    e.Property(x => x.Color).HasMaxLength(50).IsRequired();
-    e.Property(x => x.CreatedAt).HasColumnType("datetime2");
+            e.Property(x => x.Name).HasMaxLength(200).IsRequired();
+            e.Property(x => x.Key).HasMaxLength(100).IsRequired();
+            e.Property(x => x.Description).HasMaxLength(1000);
+            e.Property(x => x.Color).HasMaxLength(50).IsRequired();
+            e.Property(x => x.CreatedAt).HasColumnType("datetime2");
 
-    // Relations
-    e.HasOne(x => x.ProjectAdmin)
-        .WithMany()
-        .HasForeignKey(x => x.ProjectAdminId)
-        .OnDelete(DeleteBehavior.Restrict);
+            // Relations
+            e.HasOne(x => x.ProjectAdmin)
+                .WithMany()
+                .HasForeignKey(x => x.ProjectAdminId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-    e.HasOne(x => x.CreatedBy)
-        .WithMany()
-        .HasForeignKey(x => x.CreatedById)
-        .OnDelete(DeleteBehavior.Restrict);
-});
+            e.HasOne(x => x.CreatedBy)
+                .WithMany()
+                .HasForeignKey(x => x.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // --- ProjectMember ---
+        modelBuilder.Entity<ProjectMember>(e =>
+        {
+            e.ToTable("ProjectMembers");
+
+            e.HasKey(x => x.Id);
+
+            // (ProjectId, UserId) tekil olsun — bir kullanıcı bir projeye 1 kez üye
+            e.HasIndex(x => new { x.ProjectId, x.UserId }).IsUnique();
+
+            e.Property(x => x.SubRole)
+             .HasMaxLength(100)
+             .IsRequired()
+             .HasDefaultValue("member");
+
+            // Tarih tipi & default
+            e.Property(x => x.CreatedAt)
+             .HasColumnType("datetime2")
+             .HasDefaultValueSql("GETUTCDATE()");
+
+            // İlişkiler
+            e.HasOne<Project>()
+             .WithMany()
+             .HasForeignKey(x => x.ProjectId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasOne<User>()
+             .WithMany()
+             .HasForeignKey(x => x.UserId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }

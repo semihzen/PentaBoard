@@ -1,0 +1,60 @@
+.imodal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.35);
+  display: grid; place-items: center;
+  z-index: 1000;
+}
+
+.imodal {
+  width: 720px; max-width: calc(100vw - 24px);
+  background: #fff; border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  overflow: hidden;
+}
+
+.imodal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px; border-bottom: 1px solid #e5e7eb;
+}
+.imodal-title { margin: 0; font-size: 18px; font-weight: 700; }
+.imodal-x { background: transparent; border: 0; font-size: 22px; cursor: pointer; }
+
+.imodal-body { padding: 16px 18px; }
+.imodal-label { font-size: 13px; color: #374151; display: block; margin-bottom: 6px; }
+.imodal-input {
+  width: 100%; padding: 10px 12px; border-radius: 8px;
+  border: 1px solid #e5e7eb; font-size: 14px; outline: none;
+}
+.imodal-input:focus { border-color: #a5b4fc; box-shadow: 0 0 0 3px rgba(165,180,252,.35); }
+
+.imodal-list {
+  margin-top: 12px; border: 1px solid #e5e7eb; border-radius: 8px;
+  max-height: 260px; overflow: auto; background: #fff;
+}
+.imodal-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 12px; cursor: pointer;
+  border-bottom: 1px solid #f3f4f6;
+}
+.imodal-row:last-child { border-bottom: 0; }
+.imodal-row input { margin-top: 3px; }
+.imodal-row-name { font-weight: 600; }
+.imodal-row-sub { font-size: 12px; color: #6b7280; }
+.imodal-empty { padding: 14px; color: #6b7280; font-size: 14px; }
+
+.imodal-field { margin-top: 14px; }
+
+.imodal-foot {
+  display: flex; justify-content: flex-end; gap: 10px;
+  padding: 14px 18px; border-top: 1px solid #e5e7eb;
+}
+.imodal-btn {
+  border-radius: 8px; padding: 10px 14px; font-weight: 600;
+  border: 1px solid #e5e7eb; background: #f9fafb; cursor: pointer;
+}
+.imodal-btn.ghost:hover { background: #f3f4f6; }
+.imodal-btn.primary {
+  background: #2563eb; color: #fff; border-color: #2563eb;
+}
+.imodal-btn.primary:hover { background: #1e40af; border-color: #1e40af; }
+.imodal-btn:disabled { opacity: .6; cursor: not-allowed; }

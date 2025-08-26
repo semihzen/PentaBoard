@@ -103,7 +103,6 @@ export default function MainPage({ slug, initialSection }) {
 
     if (p) { apply(p); }
     else {
-      // opsiyonel: tekil fetch
       (async () => {
         try {
           const res = await fetch(`${API_BASE}/api/projects/by-key/${keyLower}`, {
@@ -114,7 +113,11 @@ export default function MainPage({ slug, initialSection }) {
             apply({
               id: d.id, name: d.name, key: d.key || keyLower,
               color: d.color || 'teal', initial: (d.name?.[0]||'P').toUpperCase(),
-              projectAdminId: d.projectAdminId
+              projectAdminId: d.projectAdminId,
+              description: d.description,
+              startDate: d.startDate,
+              endDate: d.endDate,
+              tags: d.tags ?? []
             });
           } else apply(null);
         } catch { apply(null); }
@@ -123,22 +126,20 @@ export default function MainPage({ slug, initialSection }) {
   }, [location.pathname, projects]);
 
   // === Sidebar: base grup + (varsa) proje grubu ===
-  const sidebarBase = useMemo(() => {
-    return [
-      {
-        key: 'Overview',
-        icon: Home,
-        label: 'Projects Overview',
-        onClick: () => navigate(`/PentaBoard/${slug}`)
-      },
-      ...(isAdminExact ? [{
-        key: 'Users',
-        icon: UserIcon,
-        label: 'Users',
-        onClick: () => navigate(`/PentaBoard/${slug}/users`)
-      }] : [])
-    ];
-  }, [isAdminExact, navigate, slug]);
+  const sidebarBase = useMemo(() => ([
+    {
+      key: 'Overview',
+      icon: Home,
+      label: 'Projects Overview',
+      onClick: () => navigate(`/PentaBoard/${slug}`)
+    },
+    ...(isAdminExact ? [{
+      key: 'Users',
+      icon: UserIcon,
+      label: 'Users',
+      onClick: () => navigate(`/PentaBoard/${slug}/users`)
+    }] : [])
+  ]), [isAdminExact, navigate, slug]);
 
   const sidebarProject = useMemo(() => {
     if (!projectCtx?.project) return [];
@@ -232,6 +233,10 @@ export default function MainPage({ slug, initialSection }) {
       const mapped = data.map(p => ({
         id: p.id,
         name: p.name,
+        description: p.description,
+        startDate: p.startDate,
+        endDate: p.endDate,
+        tags: p.tags ?? [],
         key: p.key,
         color: p.color || 'teal',
         initial: (p.name?.[0] || 'P').toUpperCase(),
@@ -413,6 +418,7 @@ export default function MainPage({ slug, initialSection }) {
           {inProject ? (
             <ProjectLayout
               slug={slug}
+              me={me}
               project={projectCtx.project}
               sub={projectCtx.sub}
               navigate={navigate}
@@ -450,6 +456,9 @@ export default function MainPage({ slug, initialSection }) {
                       >
                         <div className={`project-avatar ${p.color}`}>{p.initial}</div>
                         <h3 className="project-name">{p.name}</h3>
+                        {!isAdminExact && !isSystemAdmin && (
+  <div className="project-chip">Project member</div>
+)}
 
                         {(isAdminExact || isSystemAdmin) && (
                           <div

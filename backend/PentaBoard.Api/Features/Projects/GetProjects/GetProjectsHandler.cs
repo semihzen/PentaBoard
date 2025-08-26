@@ -19,7 +19,6 @@ public class GetProjectsHandler : IRequestHandler<GetProjectsQuery, List<GetProj
     public async Task<List<GetProjectsResult>> Handle(GetProjectsQuery request, CancellationToken ct)
     {
         var user = _http.HttpContext!.User;
-
         var userIdStr = user.FindFirst("uid")?.Value
                         ?? user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrWhiteSpace(userIdStr))
@@ -36,24 +35,34 @@ public class GetProjectsHandler : IRequestHandler<GetProjectsQuery, List<GetProj
         var isAdmin = role == "admin";
         var isSystemAdmin = role == "system admin";
 
-        IQueryable<Domain.Project> query = _db.Projects.AsNoTracking();
+        IQueryable<Domain.Project> query;
 
         if (isAdmin)
         {
             // Admin: tüm projeler
+            query = _db.Projects.AsNoTracking();
         }
         else if (isSystemAdmin)
         {
-            // System Admin: kendisine atanmış projeler
-            query = query.Where(p => p.ProjectAdminId == currentUserId);
+            // System Admin: sahibi olduğu VE/VEYA üye olduğu projeler
+            query =
+                _db.Projects.AsNoTracking()
+                  .Where(p =>
+                      p.ProjectAdminId == currentUserId ||
+                      _db.ProjectMembers.Any(m => m.ProjectId == p.Id && m.UserId == currentUserId)
+                  );
         }
         else
         {
-            // User: şimdilik proje göstermiyoruz (ileride membership ile açılacak)
-            return new List<GetProjectsResult>();
+            // User: yalnızca üye olduğu projeler
+            query =
+                _db.Projects.AsNoTracking()
+                  .Where(p =>
+                      _db.ProjectMembers.Any(m => m.ProjectId == p.Id && m.UserId == currentUserId)
+                  );
         }
 
-        // 1) EF'nin çevirebildiği yalın alanları çek
+        // 1) EF'nin çevirebildiği alanları çek
         var raw = await query
             .OrderByDescending(p => p.CreatedAt)
             .Select(p => new
@@ -70,9 +79,10 @@ public class GetProjectsHandler : IRequestHandler<GetProjectsQuery, List<GetProj
                 p.CreatedById,
                 p.CreatedAt
             })
+            .Distinct() // system admin için owner+member overlap'lerini engelle
             .ToListAsync(ct);
 
-        // 2) Materialize olduktan sonra Tags'i parçala ve DTO'ya map et
+        // 2) Tags'i ayır ve DTO'ya map et
         var results = raw.Select(p => new GetProjectsResult(
             p.Id,
             p.Name,

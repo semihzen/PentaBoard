@@ -10,6 +10,10 @@ using PentaBoard.Api.Features.Projects;
 using PentaBoard.Api.Features.Projects.GetProjects;
 using PentaBoard.Api.Features.Projects.CreateProject;
 using PentaBoard.Api.Features.Projects.DeleteProject;
+using PentaBoard.Api.Features.Projects.UpdateProject;
+using PentaBoard.Api.Features.Members.AddProjectMember;
+using PentaBoard.Api.Features.Members.GetMember;
+
 // 1) .env -> Environment Variables
 Env.Load();
 
@@ -112,4 +116,8 @@ app.MapCreateProjectEndpoint();
 app.MapGetProjectsEndpoint();
 app.MapControllers();
 app.MapDeleteProjectEndpoint();
+app.MapUpdateProjectEndpoint();
+AddProjectMemberEndpoint.Map(app);
+app.MapGetProjectMembers();
+
 app.Run();
