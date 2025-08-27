@@ -1,0 +1,62 @@
+/* Backdrop */
+.pb-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+/* Modal card */
+.pb-modal {
+  width: 420px;
+  max-width: 95vw;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.1);
+}
+
+/* Head & body */
+.pb-modal-head { margin-bottom: 12px; }
+.pb-modal-body { display: grid; gap: 12px; }
+
+/* Rows */
+.pb-modal-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.pb-modal-label { color:#6b7280; font-size: 13px; }
+.pb-modal-value { color:#111827; }
+
+/* Input */
+.pb-input {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+  outline: none;
+}
+.pb-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+}
+.pb-help {
+  color:#6b7280;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Actions */
+.pb-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}

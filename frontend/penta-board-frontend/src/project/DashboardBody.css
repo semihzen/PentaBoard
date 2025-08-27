@@ -1,0 +1,168 @@
+/* ==== Viewport'a göre yükseklik ayarı için değişkenler ==== */
+:root{
+  /* Header + üst boşluk toplamına göre oynat: 260–320 arası deneyebilirsin */
+  --pb-col-offset: 280px;
+  --pb-card-max-h: 200px; /* kart içi scroll limiti */
+}
+
+/* Wrapper */
+.dash-wrap { display: grid; gap: 16px; }
+
+/* Top bar */
+.dash-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.dash-new { display: flex; align-items: center; gap: 10px; }
+.dash-tools { display: flex; align-items: center; gap: 8px; }
+
+/* Inputs & buttons */
+.input {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+  outline: none;
+  min-width: 260px;
+}
+.input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+
+.btn {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover { background: #f3f4f6; }
+.btn-primary { background: #2563eb; color: #fff; border-color: #2563eb; }
+.btn-primary:hover { background: #1e40af; border-color: #1e40af; }
+
+.icon-btn {
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  opacity: .8;
+  line-height: 1;
+}
+.icon-btn:hover { background: #f3f4f6; opacity: 1; }
+
+/* Delete (x) – daha belirgin ve taşmayan */
+.icon-btn.danger{
+  color: #dc2626;          /* red-600 */
+  font-size: 16px;
+  font-weight: 800;
+  padding: 4px 8px;
+}
+.icon-btn.danger:hover { background: #fee2e2; }
+
+/* ===== BOARD: nowrap flex, yatay scroll ===== */
+.board {
+  display: flex;
+  flex-wrap: nowrap;           /* ↓ asla alt satıra inmez */
+  gap: 12px;
+  overflow-x: auto;            /* ↓ sığmazsa yatay scroll */
+  overflow-y: hidden;
+  padding-bottom: 6px;         /* scroll için küçük boşluk */
+  -webkit-overflow-scrolling: touch;
+  align-items: stretch;
+}
+
+/* Her sütun alanı paylaşır; yükseklik viewport'a göre */
+.col {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+
+  /* yükseklik kontrolü */
+  height: calc(100vh - var(--pb-col-offset));
+  min-height: 420px;                 /* küçük ekran emniyet */
+  flex: 1 1 280px;                   /* büyür + daralır (basis 280px) */
+  min-width: 220px;                  /* buradan daha daralmaz */
+}
+
+/* Kolon başlığı */
+.col-head {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto; /* title | count | actions */
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #f3f4f6;
+}
+.col-title {
+  font-weight: 700; color: #111827; cursor: text;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.col-meta {
+  font-size: 12px; color: #6b7280;
+  padding: 2px 8px; border: 1px solid #e5e7eb; border-radius: 999px;
+}
+.col-actions { display: flex; gap: 6px; }
+
+/* İsim düzenleme input’u taşmasın */
+.col-rename{
+  min-width: 0;      /* grid child shrink */
+  width: 100%;
+  max-width: 180px;  /* butonları itmesin, istersen 200–220 yap */
+}
+
+/* Kolon gövdesi – kalan alanı tamamen kapla + iç scroll */
+.col-body {
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+
+  flex: 1 1 auto;    /* başlıktan kalan alanı al */
+  min-height: 0;     /* FLEX child’ın düzgün küçülmesi için kritik */
+  overflow-y: auto;  /* içerik uzun olursa iç scroll */
+}
+
+/* ===== Kart: iç scroll ===== */
+.card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, #ffffff, #fafafa);
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.03);
+
+  max-height: var(--pb-card-max-h);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;  /* parent scroll'a zincirlenmesin */
+}
+.card:hover { box-shadow: 0 2px 6px rgba(0,0,0,.06); }
+
+.card-title {
+  font-weight: 600;
+  color: #111827;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Hover ipucu */
+.col-body:hover { background: #fafafa; border-radius: 8px; }
+
+/* (Opsiyonel) scrollbar inceltme */
+.board::-webkit-scrollbar { height: 8px; }
+.board::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 999px; }
+.board::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+
+.card::-webkit-scrollbar { width: 8px; }
+.card::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 999px; }
+.card::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+
+/* küçük ilave */
+.col-edit { display: flex; align-items: center; gap: 6px; }
+.icon-btn.success:hover { background: #dcfce7; }    /* yeşil dokunuş */

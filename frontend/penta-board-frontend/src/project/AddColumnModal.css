@@ -1,0 +1,36 @@
+/* Backdrop */
+.pb-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, .45); /* slate-900/45 */
+  display: grid;
+  place-items: center;
+  z-index: 60;
+}
+
+/* Panel */
+.pb-modal {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+}
+
+/* Small modal */
+.pb-modal-sm { width: 380px; max-width: calc(100vw - 40px); }
+
+.pb-modal-head { padding: 14px 16px; border-bottom: 1px solid #f3f4f6; }
+.pb-modal-body { padding: 14px 16px; display: grid; gap: 8px; }
+.pb-modal-actions {
+  padding: 12px 16px;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Labels & inputs */
+.pb-modal-label { font-size: 13px; color: #6b7280; }
+.wfull { width: 100%; }
+
+/* Reuse .btn and .input from DashboardBody.css */

@@ -3,6 +3,8 @@ import './SummaryBody.css';
 import { API_BASE, getToken } from '../utils/auth';
 import ChangeDescription from './ChangeDescription';
 import InviteMemberModal from './InviteMemberModal';
+import SetRoleModal from './SetRoleModal'; 
+import './SetRoleModal.css';
 
 export default function SummaryBody({ project, me: meProp, onInvite }) {
   const [p, setP] = useState(project);
@@ -31,6 +33,9 @@ export default function SummaryBody({ project, me: meProp, onInvite }) {
   const [members, setMembers] = useState([]);      // { userId, name, email, subRole, isOwner }
   const [loadingMembers, setLoadingMembers] = useState(false);
   const [removing, setRemoving] = useState(null);
+
+  // ===== Set Role modal state (modal ayrı bileşende) =====
+  const [roleModal, setRoleModal] = useState({ open: false, userId: null, name: '', current: 'member' });
 
   // helpers
   const formatDate = (d) => {
@@ -200,14 +205,47 @@ export default function SummaryBody({ project, me: meProp, onInvite }) {
                       </div>
                     </div>
 
-                    <button
-                      className="pb-btn danger sm"
-                      disabled={!meCanManage || m.isOwner || removing === m.userId}
-                      title={m.isOwner ? 'Owner cannot be removed' : 'Remove from project'}
-                      onClick={() => console.log('remove to-be-implemented', m.userId)}
-                    >
-                      {removing === m.userId ? 'Removing…' : 'Remove'}
-                    </button>
+                    <div className="pb-row-actions">
+                      <button
+                        className="pb-btn sm"
+                        disabled={!meCanManage || m.isOwner}
+                        title={m.isOwner ? 'Owner role cannot be changed' : 'Set role'}
+                        onClick={() =>
+                          setRoleModal({
+                            open: true,
+                            userId: m.userId,
+                            name: m.name,
+                            current: m.subRole || 'member'
+                          })
+                        }
+                      >
+                        Set role
+                      </button>
+
+                      <button
+                        className="pb-btn danger sm"
+                        disabled={!meCanManage || m.isOwner || removing === m.userId}
+                        title={m.isOwner ? 'Owner cannot be removed' : 'Remove from project'}
+                        onClick={async () => {
+                          if (!window.confirm(`Remove ${m.name}?`)) return;
+                          try {
+                            setRemoving(m.userId);
+                            await fetch(`${API_BASE}/api/projects/${p.id}/members/${m.userId}`, {
+                              method: 'DELETE',
+                              headers: { Authorization: `Bearer ${getToken()}` }
+                            });
+                            await loadMembers();
+                          } catch (err) {
+                            console.error(err);
+                            alert("Failed to remove member.");
+                          } finally {
+                            setRemoving(null);
+                          }
+                        }}
+                      >
+                        {removing === m.userId ? 'Removing…' : 'Remove'}
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -256,6 +294,17 @@ export default function SummaryBody({ project, me: meProp, onInvite }) {
         project={p}
         onClose={() => setInviteOpen(false)}
         onAdded={() => loadMembers()}
+      />
+
+      {/* Set Role Modal (ayrı dosya) */}
+      <SetRoleModal
+        open={roleModal.open}
+        projectId={p?.id}
+        userId={roleModal.userId}
+        name={roleModal.name}
+        current={roleModal.current}
+        onClose={() => setRoleModal({ open: false, userId: null, name: '', current: 'member' })}
+        onSaved={() => loadMembers()}
       />
     </div>
   );

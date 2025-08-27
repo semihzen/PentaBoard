@@ -13,6 +13,13 @@ using PentaBoard.Api.Features.Projects.DeleteProject;
 using PentaBoard.Api.Features.Projects.UpdateProject;
 using PentaBoard.Api.Features.Members.AddProjectMember;
 using PentaBoard.Api.Features.Members.GetMember;
+using PentaBoard.Api.Features.Members.RemoveProjectMember;
+using PentaBoard.Api.Features.Members.SetMemberRole;
+using PentaBoard.Api.Features.Boards.GetBoard;
+using PentaBoard.Api.Features.Boards.AddBoardColumn;
+using PentaBoard.Api.Features.Boards.MoveBoardColumn;
+using PentaBoard.Api.Features.Boards.RenameBoardColumn;
+using PentaBoard.Api.Features.Boards.DeleteBoardColumn;
 
 // 1) .env -> Environment Variables
 Env.Load();
@@ -119,5 +126,12 @@ app.MapDeleteProjectEndpoint();
 app.MapUpdateProjectEndpoint();
 AddProjectMemberEndpoint.Map(app);
 app.MapGetProjectMembers();
+RemoveProjectMemberEndpoint.Map(app);
+SetMemberRoleEndpoint.Map(app);
+app.MapGetBoard();
+app.MapAddBoardColumn();
+app.MapMoveBoardColumn();
+app.MapRenameBoardColumn();
+app.MapDeleteBoardColumn();
 
 app.Run();

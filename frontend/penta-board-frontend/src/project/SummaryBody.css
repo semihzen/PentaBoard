@@ -303,4 +303,11 @@
 .pb-btn.danger { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
 .pb-btn.danger:hover { background: #fecaca; }
 .pb-muted { color: #6b7280; }
+.pb-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.pb-row-actions { display: flex; gap: 8px; }
 
+/* Owner / yetkisiz durumlarda yasak imleci */
+.pb-btn:disabled { opacity: 0.6; cursor: not-allowed; }

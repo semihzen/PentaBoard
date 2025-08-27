@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PentaBoard.Api.Infrastructure;
 
@@ -11,9 +12,11 @@ using PentaBoard.Api.Infrastructure;
 namespace PentaBoard.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250827115957_AddBoardAndColumns")]
+    partial class AddBoardAndColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,6 +76,9 @@ namespace PentaBoard.Api.Migrations
                     b.Property<Guid>("BoardId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("BoardId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Color")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -99,6 +105,8 @@ namespace PentaBoard.Api.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BoardId1");
 
                     b.HasIndex("BoardId", "Name")
                         .IsUnique();
@@ -145,96 +153,6 @@ namespace PentaBoard.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("PentaBoard.Api.Domain.Entities.WorkItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AssigneeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BoardColumnId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BoardId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("CompletedHours")
-                        .HasColumnType("decimal(6,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("OrderKey")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("OriginalEstimateHours")
-                        .HasColumnType("decimal(6,2)");
-
-                    b.Property<byte?>("Priority")
-                        .HasColumnType("tinyint");
-
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("RemainingHours")
-                        .HasColumnType("decimal(6,2)");
-
-                    b.Property<Guid>("ReporterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte?>("Severity")
-                        .HasColumnType("tinyint");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("StoryPoints")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TagsJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
-                        .HasDefaultValue("Task");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssigneeId");
-
-                    b.HasIndex("BoardId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("ReporterId");
-
-                    b.HasIndex("BoardColumnId", "OrderKey");
-
-                    b.ToTable("WorkItems", (string)null);
                 });
 
             modelBuilder.Entity("PentaBoard.Api.Domain.Project", b =>
@@ -397,42 +315,14 @@ namespace PentaBoard.Api.Migrations
             modelBuilder.Entity("PentaBoard.Api.Domain.Entities.BoardColumn", b =>
                 {
                     b.HasOne("PentaBoard.Api.Domain.Entities.Board", null)
-                        .WithMany("Columns")
+                        .WithMany()
                         .HasForeignKey("BoardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PentaBoard.Api.Domain.Entities.WorkItem", b =>
-                {
-                    b.HasOne("PentaBoard.Api.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("AssigneeId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("PentaBoard.Api.Domain.Entities.BoardColumn", null)
-                        .WithMany()
-                        .HasForeignKey("BoardColumnId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PentaBoard.Api.Domain.Entities.Board", null)
-                        .WithMany()
-                        .HasForeignKey("BoardId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PentaBoard.Api.Domain.Project", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PentaBoard.Api.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("ReporterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("Columns")
+                        .HasForeignKey("BoardId1");
                 });
 
             modelBuilder.Entity("PentaBoard.Api.Domain.Project", b =>
