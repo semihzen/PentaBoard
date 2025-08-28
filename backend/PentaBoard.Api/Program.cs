@@ -1,32 +1,44 @@
+using DotNetEnv;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using DotNetEnv;
-using PentaBoard.Api.Infrastructure;                         // AppDbContext
-using PentaBoard.Api.Features.Authentication.Common;         // AddJwtAuth()
-using PentaBoard.Api.Features.Authentication.LoginUser;      // MediatR assembly
-using PentaBoard.Api.Infrastructure.Email;                   // IEmailSender, SmtpOptions
-using PentaBoard.Api.Infrastructure.Security;                // IPasswordHasher
-using PentaBoard.Api.Features.Projects;
+
+using PentaBoard.Api.Features.Authentication.Common;      // AddJwtAuth()
+using PentaBoard.Api.Features.Authentication.LoginUser;   // MediatR assembly marker
+using PentaBoard.Api.Infrastructure;                      // AppDbContext
+using PentaBoard.Api.Infrastructure.Email;                // IEmailSender, SmtpEmailSender, SmtpOptions
+using PentaBoard.Api.Infrastructure.Security;             // IPasswordHasher, BcryptPasswordHasher
+
+// Projects
 using PentaBoard.Api.Features.Projects.GetProjects;
 using PentaBoard.Api.Features.Projects.CreateProject;
 using PentaBoard.Api.Features.Projects.DeleteProject;
 using PentaBoard.Api.Features.Projects.UpdateProject;
+
+// Members
 using PentaBoard.Api.Features.Members.AddProjectMember;
 using PentaBoard.Api.Features.Members.GetMember;
 using PentaBoard.Api.Features.Members.RemoveProjectMember;
 using PentaBoard.Api.Features.Members.SetMemberRole;
+
+// Boards
 using PentaBoard.Api.Features.Boards.GetBoard;
 using PentaBoard.Api.Features.Boards.AddBoardColumn;
 using PentaBoard.Api.Features.Boards.MoveBoardColumn;
 using PentaBoard.Api.Features.Boards.RenameBoardColumn;
 using PentaBoard.Api.Features.Boards.DeleteBoardColumn;
 
-// 1) .env -> Environment Variables
-Env.Load();
+// WorkItems
+using PentaBoard.Api.Features.WorkItems.Create;
+using PentaBoard.Api.Features.WorkItems.Delete;
+using PentaBoard.Api.Features.WorkItems.Move;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 2) appsettings + Environment Variables
+// 1) .env
+Env.Load();
+
+// 2) extra configuration
 builder.Configuration.AddEnvironmentVariables();
 
 // 3) Services
@@ -50,7 +62,7 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityRequirement(new OpenApiSecurityRequirement { [scheme] = new List<string>() });
 });
 
-// SMTP (Smtp__* env/appsettings)
+// SMTP
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
 
@@ -72,7 +84,7 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(connStr));
 // HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
 
-// CORS (yalnızca frontend origin’lerini ekle)
+// CORS
 const string CorsPolicy = "frontend";
 var configuredOrigins = (builder.Configuration["Cors:Origins"] ?? "")
     .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
@@ -87,7 +99,7 @@ builder.Services.AddCors(opt =>
         .AllowAnyMethod());
 });
 
-// MediatR
+// MediatR (handler’ları bu assembly’den tara)
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssemblyContaining<LoginUserHandler>();
@@ -96,7 +108,7 @@ builder.Services.AddMediatR(cfg =>
 // JWT
 builder.Services.AddJwtAuth(builder.Configuration);
 
-// Admin policy (rol isimlerindeki küçük/büyük farkını tolere et)
+// Authorization
 builder.Services.AddAuthorization(o =>
 {
     o.AddPolicy("AdminOnly", p => p.RequireRole("Admin", "System Admin", "admin"));
@@ -110,8 +122,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-if (!app.Environment.IsDevelopment())
+else
 {
     app.UseHttpsRedirection();
 }
@@ -119,19 +130,36 @@ if (!app.Environment.IsDevelopment())
 app.UseCors(CorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
+
+// ---- Endpoints ----
+
+// Projects
 app.MapCreateProjectEndpoint();
 app.MapGetProjectsEndpoint();
-app.MapControllers();
 app.MapDeleteProjectEndpoint();
 app.MapUpdateProjectEndpoint();
+
+// Members
 AddProjectMemberEndpoint.Map(app);
 app.MapGetProjectMembers();
 RemoveProjectMemberEndpoint.Map(app);
 SetMemberRoleEndpoint.Map(app);
+
+// Boards
 app.MapGetBoard();
 app.MapAddBoardColumn();
 app.MapMoveBoardColumn();
 app.MapRenameBoardColumn();
 app.MapDeleteBoardColumn();
+
+// Work Items
+app.MapCreateWorkItem();
+app.MapDeleteWorkItem();
+app.MapMoveWorkItemEndpoint();
+
+// NOT: MoveWorkItem endpoint’i henüz extension olarak yoksa çağırma.
+// Eğer daha sonra eklersen: app.MapMoveWorkItemEndpoint();
+
+app.MapControllers();
 
 app.Run();

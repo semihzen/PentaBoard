@@ -1,0 +1,147 @@
+/* TaskDetailModal.css */
+
+/* Arkaplan */
+.pb-modal-backdrop{
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15,23,42,.45);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+/* Modal kutu — dış scroll'u kaldır, sadece body’e ver */
+.pb-modal{
+  width: min(720px, 92vw);
+  max-height: 90vh;                 /* biraz daha geniş tampon */
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 20px 48px rgba(0,0,0,.18), 0 8px 18px rgba(0,0,0,.10);
+  animation: pbModalIn .16s ease-out;
+
+  /* 🔽 Dış scroll'u kapatıyoruz ve düzeni sabitliyoruz */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes pbModalIn{
+  from { opacity: .6; transform: translateY(6px) scale(.98); }
+  to   { opacity: 1;  transform: translateY(0)    scale(1); }
+}
+
+/* Başlık */
+.pb-modal-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  flex: 0 0 auto;                   /* header yüksekliği sabit */
+}
+.pb-modal-title{
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: .2px;
+}
+
+/* Gövde — gerektiğinde sadece burada scroll */
+.pb-modal-body{
+  padding: 14px 16px 18px;
+  display: grid;
+  gap: 12px;
+
+  /* 🔽 İçerik header’ı aşarsa sadece body scroll olur */
+  overflow: auto;
+  max-height: calc(90vh - 64px);    /* ~header yüksekliği kadar düş */
+}
+
+/* Satırlar */
+.pb-row{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pb-row + .pb-row{ margin-top: 6px; }
+
+/* Description satırı: yüksekliği kısıtla (küçük kalsın) */
+.pb-row.col{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 180px;
+}
+
+/* Etiket */
+.pb-label{
+  min-width: 110px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+
+/* Açıklama alanı (küçük ve sabit) */
+.pb-desc{
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 8px 10px;
+  line-height: 1.4;
+  color: #0f172a;
+  white-space: pre-wrap;
+  word-break: break-word;
+
+  min-height: 40px !important;
+  max-height: 100px !important;
+  overflow-y: auto;
+}
+
+/* Yardımcılar */
+.pb-muted{ color:#6b7280; }
+
+/* Rozetler */
+.pill{
+  background:#eef2ff;
+  border:1px solid #c7d2fe;
+  color:#3730a3;
+  border-radius:999px;
+  padding:2px 8px;
+  font-size:12px;
+  font-weight:700;
+}
+.prio{
+  display: inline-block;
+  font-weight:700;
+  font-size:12px;
+  padding:2px 8px;
+  border-radius:8px;
+}
+.prio.p-1{ background:#fecaca; color:#7f1d1d; }
+.prio.p-2{ background:#fdba74; color:#78350f; }
+.prio.p-3{ background:#fde047; color:#3f6212; }
+.prio.p-4{ background:#6ee7b7; color:#065f46; }
+.prio.p-5{ background:#cbd5e1; color:#334155; }
+
+/* Kapat butonu */
+.icon-btn{
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+  color:#64748b;
+}
+.icon-btn:hover{ background:#f1f5f9; color:#0f172a; }
+
+/* Responsive */
+@media (max-width: 520px){
+  .pb-label{ min-width: 0; font-size: 12px; }
+  .pb-row{ flex-direction: column; align-items: flex-start; }
+  .pb-modal-title{ font-size: 16px; }
+}

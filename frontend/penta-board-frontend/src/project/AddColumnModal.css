@@ -17,7 +17,7 @@
 }
 
 /* Small modal */
-.pb-modal-sm { width: 380px; max-width: calc(100vw - 40px); }
+.pb-modal-sm { width: 360px !important; max-width: calc(100vw - 40px); }
 
 .pb-modal-head { padding: 14px 16px; border-bottom: 1px solid #f3f4f6; }
 .pb-modal-body { padding: 14px 16px; display: grid; gap: 8px; }

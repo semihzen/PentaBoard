@@ -1,0 +1,54 @@
+/* Backdrop & card */
+.nim-backdrop{position:fixed;inset:0;background:rgba(14,23,38,.50);backdrop-filter:saturate(120%) blur(2px);display:flex;align-items:center;justify-content:center;z-index:50}
+.nim-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;width:640px;max-width:95vw;box-shadow:0 20px 60px rgba(2,6,23,.18);overflow:hidden}
+
+/* Head */
+.nim-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;font-weight:700;border-bottom:1px solid #eef2f7}
+.nim-x{border:none;background:transparent;font-size:22px;line-height:1;border-radius:8px;cursor:pointer;padding:6px}
+.nim-x:hover{background:#f1f5f9}
+
+/* Body */
+.nim-body{padding:16px;display:grid;gap:12px}
+.nim-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nim-col label,.nim-body>label{font-size:12px;color:#475569;margin-bottom:4px;display:block}
+.input{border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px;font-size:14px;outline:none}
+.input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+textarea.input{resize:vertical}
+
+/* Assignee select */
+.nim-assignee{position:relative}
+.nim-chip{position:absolute;right:8px;top:7px;border:none;background:#eef2ff;border-radius:12px;padding:4px 8px;font-size:12px;color:#1e3a8a;cursor:pointer}
+.nim-drop{position:absolute;left:0;right:0;top:100%;margin-top:6px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 12px 30px rgba(2,6,23,.14);max-height:260px;overflow:auto;z-index:10}
+.nim-empty{padding:10px 12px;color:#64748b;font-size:13px}
+.nim-opt{display:flex;gap:10px;align-items:center;padding:8px 10px;cursor:pointer}
+.nim-opt:hover{background:#f8fafc}
+.nim-avatar{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#e0e7ff;color:#1e3a8a;font-weight:700}
+.nim-opt-main{min-width:0}
+.nim-opt-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nim-opt-sub{font-size:12px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Footer */
+.nim-actions{display:flex;justify-content:flex-end;gap:10px;padding:12px 16px;border-top:1px solid #eef2f7}
+.btn{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
+.btn:hover{background:#f1f5f9}
+.btn-primary{background:#2563eb;color:#fff;border-color:#2563eb}
+.btn-primary:hover{filter:brightness(.95)}
+
+/* Small screens */
+@media (max-width: 520px){
+  .nim-row{grid-template-columns:1fr}
+
+}
+/* ... mevcut stillerin aynen kalsın ... */
+
+/* Priority alanı için açıklama (hint) */
+.nim-input-with-hint{position:relative}
+.nim-input-prio{padding-right:132px;} /* sağda span için boşluk */
+.nim-hint{
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  font-size:12px; color:#64748b; pointer-events:none;
+}
+
+/* Type input placeholder iyileştirme (opsiyonel) */
+/* input::placeholder{color:#9ca3af} */
+
