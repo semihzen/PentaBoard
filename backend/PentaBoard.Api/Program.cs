@@ -33,6 +33,13 @@ using PentaBoard.Api.Features.WorkItems.Create;
 using PentaBoard.Api.Features.WorkItems.Delete;
 using PentaBoard.Api.Features.WorkItems.Move;
 
+// 🔹 Files (kapı endpointleri)
+using PentaBoard.Api.Features.Files.ListFiles;
+using PentaBoard.Api.Features.Files.UploadFiles;
+using PentaBoard.Api.Features.Files.DownloadFiles;
+using PentaBoard.Api.Features.Files.DeleteFiles;
+using PentaBoard.Api.Features.Files.PreviewFiles;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // 1) .env
@@ -128,6 +135,12 @@ else
 }
 
 app.UseCors(CorsPolicy);
+
+// 🔹 wwwroot’tan statik dosya ver (PDF indirme için gerekli)
+app.UseStaticFiles();
+Directory.CreateDirectory(
+    Path.Combine(app.Environment.WebRootPath ?? "wwwroot", "uploads", "projects"));
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -157,9 +170,17 @@ app.MapCreateWorkItem();
 app.MapDeleteWorkItem();
 app.MapMoveWorkItemEndpoint();
 
+// 🔹 Project Files
+app.MapListProjectFilesEndpoint();     // List
+app.MapUploadProjectFileEndpoint();   // Upload (yalnız PDF)
+app.MapDownloadProjectFileEndpoint(); // Download
+app.MapDeleteProjectFileEndpoint();   // Delete
+app.MapPreviewProjectFileEndpoint();
+
 // NOT: MoveWorkItem endpoint’i henüz extension olarak yoksa çağırma.
 // Eğer daha sonra eklersen: app.MapMoveWorkItemEndpoint();
 
 app.MapControllers();
 
 app.Run();
+

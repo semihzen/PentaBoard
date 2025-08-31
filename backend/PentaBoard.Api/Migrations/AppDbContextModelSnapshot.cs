@@ -109,6 +109,48 @@ namespace PentaBoard.Api.Migrations
                     b.ToTable("BoardColumns", (string)null);
                 });
 
+            modelBuilder.Entity("PentaBoard.Api.Domain.Entities.ProjectFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("SizeBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoragePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("UploadedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UploadedById");
+
+                    b.HasIndex("ProjectId", "CreatedAt");
+
+                    b.ToTable("ProjectFiles", (string)null);
+                });
+
             modelBuilder.Entity("PentaBoard.Api.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -400,6 +442,21 @@ namespace PentaBoard.Api.Migrations
                         .WithMany("Columns")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PentaBoard.Api.Domain.Entities.ProjectFile", b =>
+                {
+                    b.HasOne("PentaBoard.Api.Domain.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PentaBoard.Api.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UploadedById")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

@@ -173,3 +173,4 @@ C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\n
 C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
 C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\net9.0\MailKit.dll
 C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\PentaBoard.Api\bin\Debug\net9.0\MimeKit.dll
+C:\Users\Semih Zenginoğlu\Desktop\PentaBoard\backend\Pentaboard.api\bin\Debug\net9.0\PentaBoard.Api.staticwebassets.runtime.json
