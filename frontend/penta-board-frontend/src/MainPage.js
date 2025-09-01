@@ -87,43 +87,26 @@ export default function MainPage({ slug, initialSection }) {
     setSection(path.endsWith('/users') ? 'Users' : 'Overview');
   }, [location.pathname]);
 
-  // === Proje bağlamı (URL’e göre) ===
+  // === Proje bağlamı (URL’e göre) — SADE: sadece eldeki projelerden eşleştir, by-key çağrısı yok ===
   const [projectCtx, setProjectCtx] = useState(null); // { project, sub }
   useEffect(() => {
     const info = parseProjectRoute(location.pathname);
     if (!info) { setProjectCtx(null); return; }
 
     const keyLower = info.projectKey.toLowerCase();
-    let p = projects.find(pr =>
+
+    // Liste yüklenmeden deneme yapma
+    if (loadingProjects) return;
+
+    // id / key / slug(name) üzerinden eşleştir
+    const p = projects.find(pr =>
       (pr.key && pr.key.toLowerCase() === keyLower) ||
-      slugify(pr.name) === keyLower || String(pr.id) === keyLower
+      slugify(pr.name) === keyLower ||
+      String(pr.id).toLowerCase() === keyLower
     );
 
-    const apply = (proj) => setProjectCtx({ project: proj || null, sub: info.sub });
-
-    if (p) { apply(p); }
-    else {
-      (async () => {
-        try {
-          const res = await fetch(`${API_BASE}/api/projects/by-key/${keyLower}`, {
-            headers: { Authorization: `Bearer ${getToken()}` }
-          });
-          if (res.ok) {
-            const d = await res.json();
-            apply({
-              id: d.id, name: d.name, key: d.key || keyLower,
-              color: d.color || 'teal', initial: (d.name?.[0]||'P').toUpperCase(),
-              projectAdminId: d.projectAdminId,
-              description: d.description,
-              startDate: d.startDate,
-              endDate: d.endDate,
-              tags: d.tags ?? []
-            });
-          } else apply(null);
-        } catch { apply(null); }
-      })();
-    }
-  }, [location.pathname, projects]);
+    setProjectCtx({ project: p || null, sub: info.sub });
+  }, [location.pathname, projects, loadingProjects]);
 
   // === Sidebar: base grup + (varsa) proje grubu ===
   const sidebarBase = useMemo(() => ([
@@ -385,7 +368,7 @@ export default function MainPage({ slug, initialSection }) {
             <div className="page-title">
               {inProject ? (
                 <>
-                  <h1 className="h1-trim">{projectCtx.project.name}</h1>
+                  <h1 className="h1-trim">{projectCtx.project?.name || 'Project'}</h1>
                   <div className="h1-sub">
                     Project • {projectCtx.sub.charAt(0).toUpperCase()+projectCtx.sub.slice(1)}
                   </div>
@@ -457,8 +440,8 @@ export default function MainPage({ slug, initialSection }) {
                         <div className={`project-avatar ${p.color}`}>{p.initial}</div>
                         <h3 className="project-name">{p.name}</h3>
                         {!isAdminExact && !isSystemAdmin && (
-  <div className="project-chip">Project member</div>
-)}
+                          <div className="project-chip">Project member</div>
+                        )}
 
                         {(isAdminExact || isSystemAdmin) && (
                           <div

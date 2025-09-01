@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PentaBoard.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+db7bb3ff3aaaa04d560d63dfc3fd4e94ab3c2f1b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c3704af587b1386182a6e5527e56b05783ba356")]
 [assembly: System.Reflection.AssemblyProductAttribute("PentaBoard.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PentaBoard.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

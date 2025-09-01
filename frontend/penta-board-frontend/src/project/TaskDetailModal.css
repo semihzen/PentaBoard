@@ -1,6 +1,6 @@
 /* TaskDetailModal.css */
 
-/* Arkaplan */
+/* ==== Arkaplan ==== */
 .pb-modal-backdrop{
   position: fixed;
   inset: 0;
@@ -10,20 +10,23 @@
   display: grid;
   place-items: center;
   padding: 16px;
+
+  /* Sayfa arkasının kaymasını engelle */
+  overscroll-behavior: contain;
 }
 
-/* Modal kutu — dış scroll'u kaldır, sadece body’e ver */
+/* ==== Modal kutu ==== */
+/* Dış scroll'u kapat, sadece body'e ver */
 .pb-modal{
   width: min(720px, 92vw);
-  max-height: 90vh;                 /* biraz daha geniş tampon */
+  max-height: 90vh;
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
   box-shadow: 0 20px 48px rgba(0,0,0,.18), 0 8px 18px rgba(0,0,0,.10);
   animation: pbModalIn .16s ease-out;
 
-  /* 🔽 Dış scroll'u kapatıyoruz ve düzeni sabitliyoruz */
-  overflow: hidden;
+  overflow: hidden;            /* dış scroll kapalı */
   display: flex;
   flex-direction: column;
 }
@@ -33,7 +36,11 @@
   to   { opacity: 1;  transform: translateY(0)    scale(1); }
 }
 
-/* Başlık */
+@media (prefers-reduced-motion: reduce){
+  .pb-modal{ animation: none; }
+}
+
+/* ==== Başlık ==== */
 .pb-modal-head{
   display: flex;
   align-items: center;
@@ -41,27 +48,40 @@
   gap: 12px;
   padding: 14px 16px;
   border-bottom: 1px solid #f1f5f9;
-  flex: 0 0 auto;                   /* header yüksekliği sabit */
+  flex: 0 0 auto;              /* header yüksekliği sabit */
 }
 .pb-modal-title{
   font-size: 18px;
   font-weight: 800;
   color: #0f172a;
   letter-spacing: .2px;
+  line-height: 1.2;
 }
 
-/* Gövde — gerektiğinde sadece burada scroll */
+/* ==== Gövde ==== */
+/* İçerik header’ı aşarsa sadece body scroll olur */
 .pb-modal-body{
   padding: 14px 16px 18px;
   display: grid;
   gap: 12px;
-
-  /* 🔽 İçerik header’ı aşarsa sadece body scroll olur */
   overflow: auto;
-  max-height: calc(90vh - 64px);    /* ~header yüksekliği kadar düş */
+  max-height: calc(90vh - 64px); /* ~header kadar düş */
 }
 
-/* Satırlar */
+/* Scrollbar zarif dursun */
+.pb-modal-body,
+.pb-desc{
+  scrollbar-width: thin;             /* Firefox */
+  scrollbar-color: #cbd5e1 #f8fafc;
+}
+.pb-modal-body::-webkit-scrollbar,
+.pb-desc::-webkit-scrollbar{ width: 8px; height: 8px; }
+.pb-modal-body::-webkit-scrollbar-thumb,
+.pb-desc::-webkit-scrollbar-thumb{ background: #cbd5e1; border-radius: 8px; }
+.pb-modal-body::-webkit-scrollbar-track,
+.pb-desc::-webkit-scrollbar-track{ background: #f8fafc; }
+
+/* ==== Satırlar ==== */
 .pb-row{
   display: flex;
   align-items: center;
@@ -69,43 +89,43 @@
 }
 .pb-row + .pb-row{ margin-top: 6px; }
 
-/* Description satırı: yüksekliği kısıtla (küçük kalsın) */
+/* Description satırı: küçük ve sabit yükseklik */
 .pb-row.col{
   display: flex;
   flex-direction: column;
   gap: 6px;
-  max-height: 180px;
 }
 
-/* Etiket */
+/* ==== Etiket ==== */
 .pb-label{
   min-width: 110px;
   font-size: 13px;
   font-weight: 700;
   color: #334155;
+  user-select: none;
 }
 
-/* Açıklama alanı (küçük ve sabit) */
+/* ==== Açıklama Alanı ==== */
 .pb-desc{
   width: 100%;
   background: #f8fafc;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 8px 10px;
-  line-height: 1.4;
+  line-height: 1.45;
   color: #0f172a;
   white-space: pre-wrap;
   word-break: break-word;
 
   min-height: 40px !important;
-  max-height: 100px !important;
+  max-height: 100px !important; /* küçük kalsın */
   overflow-y: auto;
 }
 
-/* Yardımcılar */
+/* ==== Yardımcılar ==== */
 .pb-muted{ color:#6b7280; }
 
-/* Rozetler */
+/* ==== Rozetler (Type) ==== */
 .pill{
   background:#eef2ff;
   border:1px solid #c7d2fe;
@@ -114,13 +134,17 @@
   padding:2px 8px;
   font-size:12px;
   font-weight:700;
+  line-height: 1.4;
 }
+
+/* ==== Priority Rozetleri ==== */
 .prio{
   display: inline-block;
   font-weight:700;
   font-size:12px;
   padding:2px 8px;
   border-radius:8px;
+  line-height: 1.4;
 }
 .prio.p-1{ background:#fecaca; color:#7f1d1d; }
 .prio.p-2{ background:#fdba74; color:#78350f; }
@@ -128,7 +152,38 @@
 .prio.p-4{ background:#6ee7b7; color:#065f46; }
 .prio.p-5{ background:#cbd5e1; color:#334155; }
 
-/* Kapat butonu */
+/* ==== Severity Rozetleri (opsiyonel) ==== */
+.sev{
+  display:inline-block;
+  font-weight:700;
+  font-size:12px;
+  padding:2px 8px;
+  border-radius:8px;
+  line-height: 1.4;
+  background:#fee2e2; color:#7f1d1d; /* default görünüm */
+}
+.sev.s-1{ background:#fecaca; color:#7f1d1d; }
+.sev.s-2{ background:#fed7aa; color:#7c2d12; }
+.sev.s-3{ background:#fde68a; color:#78350f; }
+.sev.s-4{ background:#d9f99d; color:#365314; }
+
+/* ==== Tag'ler (tagsJson için) ==== */
+.pb-tags{
+  display:flex;
+  flex-wrap: wrap;
+  gap:6px;
+}
+.tag-pill{
+  background:#eef2f7;
+  border:1px solid #e5e7eb;
+  border-radius:999px;
+  padding:2px 8px;
+  font-size:12px;
+  color:#334155;
+  line-height: 1.4;
+}
+
+/* ==== Kapat butonu ==== */
 .icon-btn{
   border: 1px solid transparent;
   background: transparent;
@@ -138,10 +193,12 @@
   color:#64748b;
 }
 .icon-btn:hover{ background:#f1f5f9; color:#0f172a; }
+.icon-btn:focus-visible{ outline: 2px solid #94a3b8; outline-offset: 2px; }
 
-/* Responsive */
+/* ==== Responsive ==== */
 @media (max-width: 520px){
   .pb-label{ min-width: 0; font-size: 12px; }
   .pb-row{ flex-direction: column; align-items: flex-start; }
   .pb-modal-title{ font-size: 16px; }
+  .pb-modal{ width: 96vw; }
 }

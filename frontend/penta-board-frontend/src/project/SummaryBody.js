@@ -3,10 +3,10 @@ import './SummaryBody.css';
 import { API_BASE, getToken } from '../utils/auth';
 import ChangeDescription from './ChangeDescription';
 import InviteMemberModal from './InviteMemberModal';
-import SetRoleModal from './SetRoleModal'; 
+import SetRoleModal from './SetRoleModal';
 import './SetRoleModal.css';
 
-export default function SummaryBody({ project, me: meProp, onInvite }) {
+export default function SummaryBody({ project, me: meProp }) {
   const [p, setP] = useState(project);
   useEffect(() => { setP(project); }, [project]);
 
@@ -30,11 +30,11 @@ export default function SummaryBody({ project, me: meProp, onInvite }) {
   const [inviteOpen, setInviteOpen] = useState(false);
 
   // ===== Members state =====
-  const [members, setMembers] = useState([]);      // { userId, name, email, subRole, isOwner }
+  const [members, setMembers] = useState([]); // { userId, name, email, subRole, isOwner }
   const [loadingMembers, setLoadingMembers] = useState(false);
   const [removing, setRemoving] = useState(null);
 
-  // ===== Set Role modal state (modal ayrı bileşende) =====
+  // ===== Set Role modal =====
   const [roleModal, setRoleModal] = useState({ open: false, userId: null, name: '', current: 'member' });
 
   // helpers
@@ -66,7 +66,7 @@ export default function SummaryBody({ project, me: meProp, onInvite }) {
       });
       const sorted = [
         ...items.filter(x => x.isOwner),
-        ...items.filter(x => !x.isOwner).sort((a,b)=>a.name.localeCompare(b.name)),
+        ...items.filter(x => !x.isOwner).sort((a, b) => a.name.localeCompare(b.name)),
       ];
       setMembers(sorted);
     } catch (e) {
@@ -92,6 +92,70 @@ export default function SummaryBody({ project, me: meProp, onInvite }) {
   }, [me, p]);
 
   const canInvite = meCanManage;
+
+  // ===== Project Stats (TaskState) =====
+  const [days, setDays] = useState(7);
+  const [boardId, setBoardId] = useState(null);
+  const [stats, setStats] = useState({ created: 0, completed: 0, inProgress: 0 });
+  const [loadingStats, setLoadingStats] = useState(false);
+
+  // BoardId bul (tekil endpoint)
+  useEffect(() => {
+    if (!p?.id) return;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/projects/${p.id}/board`, {
+          headers: { Authorization: `Bearer ${getToken()}` }
+        });
+        if (!res.ok) {
+          console.warn('Get board failed', res.status);
+          if (!cancelled) setBoardId(null);
+          return;
+        }
+        const data = await res.json();
+        if (!cancelled) setBoardId(data?.id ?? null);
+      } catch (err) {
+        console.error('Get board error', err);
+        if (!cancelled) setBoardId(null);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [p?.id]);
+
+  // TaskState endpoint’inden istatistik çek
+  useEffect(() => {
+    if (!p?.id || !boardId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        setLoadingStats(true);
+        const res = await fetch(
+          `${API_BASE}/api/projects/${p.id}/boards/${boardId}/workitems/taskstate?days=${days}`,
+          { headers: { Authorization: `Bearer ${getToken()}` } }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          if (!cancelled) {
+            setStats({
+              created: data?.created ?? 0,
+              completed: data?.completed ?? 0,
+              inProgress: data?.inProgress ?? 0
+            });
+          }
+        } else if (!cancelled) {
+          setStats({ created: 0, completed: 0, inProgress: 0 });
+        }
+      } catch {
+        if (!cancelled) setStats({ created: 0, completed: 0, inProgress: 0 });
+      } finally {
+        if (!cancelled) setLoadingStats(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [p?.id, boardId, days]);
 
   // UI helpers
   const hasDesc = !!(p?.description && String(p.description).trim().length);
@@ -163,7 +227,7 @@ export default function SummaryBody({ project, me: meProp, onInvite }) {
           </div>
         </section>
 
-        {/* Members – GENİŞ KART (About’ın ALTINDA) */}
+        {/* Members – GENİŞ KART */}
         <section className="pb-card pb-members-wide">
           <div className="pb-side-head">
             <h3 className="pb-h3">Members</h3>
@@ -259,7 +323,11 @@ export default function SummaryBody({ project, me: meProp, onInvite }) {
         <section className="pb-card pb-side-card">
           <div className="pb-side-head">
             <h3 className="pb-h3">Project stats</h3>
-            <select className="pb-select" defaultValue="7">
+            <select
+              className="pb-select"
+              value={days}
+              onChange={(e) => setDays(parseInt(e.target.value || '7', 10))}
+            >
               <option value="7">Last 7 days</option>
               <option value="14">Last 14 days</option>
               <option value="30">Last 30 days</option>
@@ -268,12 +336,24 @@ export default function SummaryBody({ project, me: meProp, onInvite }) {
 
           <div className="pb-side-stats">
             <div className="pb-side-stat">
-              <div className="pb-side-value">1</div>
-              <div className="pb-side-sub">Work items created</div>
+              <div className="pb-side-value">
+                {loadingStats ? '…' : stats.created}
+              </div>
+              <div className="pb-side-sub">Task created</div>
             </div>
+
             <div className="pb-side-stat">
-              <div className="pb-side-value">0</div>
-              <div className="pb-side-sub">Work items completed</div>
+              <div className="pb-side-value">
+                {loadingStats ? '…' : stats.completed}
+              </div>
+              <div className="pb-side-sub">Task completed</div>
+            </div>
+
+            <div className="pb-side-stat">
+              <div className="pb-side-value">
+                {loadingStats ? '…' : stats.inProgress}
+              </div>
+              <div className="pb-side-sub">Task in process</div>
             </div>
           </div>
         </section>
@@ -296,7 +376,6 @@ export default function SummaryBody({ project, me: meProp, onInvite }) {
         onAdded={() => loadMembers()}
       />
 
-      {/* Set Role Modal (ayrı dosya) */}
       <SetRoleModal
         open={roleModal.open}
         projectId={p?.id}

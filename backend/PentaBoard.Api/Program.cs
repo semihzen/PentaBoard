@@ -32,6 +32,8 @@ using PentaBoard.Api.Features.Boards.DeleteBoardColumn;
 using PentaBoard.Api.Features.WorkItems.Create;
 using PentaBoard.Api.Features.WorkItems.Delete;
 using PentaBoard.Api.Features.WorkItems.Move;
+using PentaBoard.Api.Features.WorkItems.Get;
+using PentaBoard.Api.Features.WorkItems.TaskState;
 
 // 🔹 Files (kapı endpointleri)
 using PentaBoard.Api.Features.Files.ListFiles;
@@ -169,6 +171,8 @@ app.MapDeleteBoardColumn();
 app.MapCreateWorkItem();
 app.MapDeleteWorkItem();
 app.MapMoveWorkItemEndpoint();
+app.MapGetWorkItemById();
+app.MapGetTaskState(); 
 
 // 🔹 Project Files
 app.MapListProjectFilesEndpoint();     // List
@@ -177,8 +181,7 @@ app.MapDownloadProjectFileEndpoint(); // Download
 app.MapDeleteProjectFileEndpoint();   // Delete
 app.MapPreviewProjectFileEndpoint();
 
-// NOT: MoveWorkItem endpoint’i henüz extension olarak yoksa çağırma.
-// Eğer daha sonra eklersen: app.MapMoveWorkItemEndpoint();
+
 
 app.MapControllers();
 
