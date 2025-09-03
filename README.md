@@ -64,3 +64,22 @@ dotnet run
 cd frontend
 npm install
 npm start
+
+
+<img width="1920" height="1028" alt="image" src="https://github.com/user-attachments/assets/cf2af8eb-9ebf-42e8-a57b-070c872d1f75" />
+
+<img width="1920" height="1029" alt="image" src="https://github.com/user-attachments/assets/4feb21e0-af46-4341-a40a-f2435db475ea" />
+<img width="1920" height="1026" alt="image" src="https://github.com/user-attachments/assets/12b11b80-0730-42eb-a065-f1560575a0fe" />
+<img width="1920" height="1028" alt="image" src="https://github.com/user-attachments/assets/967d3f29-b8aa-4729-8bb4-40a3544b50bc" />
+<img width="1920" height="1028" alt="image" src="https://github.com/user-attachments/assets/371569a7-6945-4a9a-84cb-6e91d0fadd1e" />
+<img width="1920" height="1031" alt="image" src="https://github.com/user-attachments/assets/c8d49109-80b1-4860-ba09-12d6edb9036a" />
+<img width="1920" height="1027" alt="image" src="https://github.com/user-attachments/assets/7e32a804-ff0b-42cf-b671-cf341b927ee8" />
+
+
+
+
+
+
+
+
+
