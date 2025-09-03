@@ -1,5 +1,4 @@
 # PentaBoard ( Task & Project Management Platform )
-# Proje geliştirme aşamasında
 
 Bu proje, ekiplerin projelerini ve görevlerini yönetebilmesi için geliştirilmiş bir *iş yönetim platformudur*.  
 Amaç: Proje oluşturma, kullanıcı daveti, rol/sub-rol atama ve görev (task) takibini kolaylaştırmak.
