@@ -67,10 +67,12 @@ Proje, *Vertical Slice Architecture* ile kurgulanmıştır:
 ```bash
 # Backend için
 cd backend
+cd backend PentaBoard.Api
 dotnet run
 
 # Frontend için
 cd frontend
+cd penta-board-frontend
 npm install
 npm start
 
